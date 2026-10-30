@@ -72,19 +72,9 @@ After creation, on the app’s **Overview** page, note:
 
 ---
 
-### A4) Add API Permissions for Power BI (Application permissions)
+### A4) Service-principal permission model
 
-**Path:** App registration → **API permissions** → **Add a permission** → **APIs my organization uses** → search **Power BI Service**  
-- **Type:** **Application permissions**  
-- Select:
-  - `Tenant.Read.All`
-  - `Dataset.Read.All`
-  - `Report.Read.All`
-- Click **Add permissions** → Click **Grant admin consent** for your organization.
-
-> These permissions are typical for read-only embedding flows that need to **read metadata** and **generate embed tokens** via backend.
-
----
+Do not add Power BI delegated/application API permissions solely for this service-principal embedding flow. Power BI authorizes the service principal through the permitted Fabric tenant setting, allowed security group and workspace membership. Follow [Microsoft's service-principal guide](https://learn.microsoft.com/en-us/power-bi/developer/embedded/embed-service-principal).
 
 ### A5) Enable Service Principal to use Power BI (once per tenant)
 
@@ -162,7 +152,7 @@ curl -s -X POST -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/
 > If the embed token call fails with a permissions error, double‑check that:
 > - The **service principal** is **Member (or higher)** on the workspace.
 > - **Tenant settings** allow service principals to use Power BI APIs.
-> - API permissions for the app registration include the **Power BI Service Application permissions** listed above and **admin consent** has been granted.
+> - The service principal is permitted by the Fabric tenant setting and has the intended workspace access.
 
 ---
 
